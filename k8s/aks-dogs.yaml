@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-helloworld-dogs  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-helloworld-dogs
+  template:
+    metadata:
+      labels:
+        app: aks-helloworld-dogs
+    spec:
+      containers:
+      - name: aks-helloworld-dogs
+        image: docker.io/mikesir87/cats:2.0
+        ports:
+        - containerPort: 5000
+        env:
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-helloworld-dogs  
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5000
+  selector:
+    app: aks-helloworld-dogs
