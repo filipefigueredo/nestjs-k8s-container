@@ -1,0 +1,6 @@
+server:
+  hostname: NODE_SERVER_HOSTNAME
+  timeout:  NODE_SERVER_TIMEOUT
+  port:  NODE_SERVER_PORT
+application:
+  debug: NODE_APPLICATION_DEBUG
