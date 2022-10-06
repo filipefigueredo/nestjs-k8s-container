@@ -17,7 +17,6 @@ spec:
         image: docker.io/mikesir87/cats:1.0
         ports:
         - containerPort: 5000
-        env:
 
 ---
 apiVersion: v1
