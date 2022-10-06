@@ -25,6 +25,13 @@ spec:
             name: aks-helloworld-dogs
             port:
               number: 5000
+      - path: /api(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: aks-helloworld-nestjs
+            port:
+              number: 8080
       - path: /(.*)
         pathType: Prefix
         backend:
