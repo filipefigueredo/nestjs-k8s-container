@@ -4,3 +4,6 @@ server:
   port:  NODE_SERVER_PORT
 application:
   debug: NODE_APPLICATION_DEBUG
+endpoints:
+  listAllBreeds: NODE_ENDPOINTS_ALL_BREEDS
+    
