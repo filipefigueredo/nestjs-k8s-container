@@ -1,0 +1,57 @@
+name: "Snyk security scan"
+
+on:
+  workflow_call:
+    inputs:
+      nodejs-version:
+        description: NodeJS version
+        required: false
+        type: string
+        default: "lts/gallium"
+      snyk-severity-threshold:
+        # valid options: low, medium, high and critical
+        description: Report only vulnerabilities at the specified level or higher.
+        required: false
+        type: string
+        default: "high"
+      target-directory:
+        description: "Target working directory"
+        required: false
+        type: string
+        default: "."
+
+jobs:
+  nodejs-scan:
+    name: Scan NodeJS project(s)
+    runs-on:
+      - self-hosted
+      - linux
+
+    env:
+      NODE_VERSION: ${{ inputs.nodejs-version }}
+      SNYK_TOKEN: ${{ secrets.SNYK_API_TOKEN }}
+      SNYK_ORGANIZATION_ID: ${{ secrets.SNYK_ORGANIZATION_ID }}
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.target-directory }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup / Install Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Setup NodeJS environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Run Snyk test
+        run: |
+          snyk test \
+            --all-projects \
+            --severity-threshold=${{ inputs.snyk-severity-threshold }} \
+            --sarif-file-output=snyk.sarif

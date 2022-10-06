@@ -1,0 +1,41 @@
+name: nodejs code validation
+
+on:
+  workflow_call:
+    inputs:
+      # valid options: python, dotnet, golang, nodejs
+      node-version:
+        description: 'NodeJS version'
+        required: false
+        type: string
+        default: '16'
+      target-directory:
+        description: 'Target working directory'
+        required: false
+        type: string
+        default: '.'
+
+jobs:
+  nodejs-build-test:
+    name: nodejs build and test
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.target-directory }}
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: setup nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
